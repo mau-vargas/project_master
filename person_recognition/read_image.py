@@ -59,29 +59,27 @@ class ReadImage:
                 img_bottom.save("person_recognition/image/persona_bottom.png")
 
 
-model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
-model.eval()
+# model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
+# model.eval()
 
-transform = transforms.ToTensor()
-img = Image.open("person_recognition/persona1.png")
-# img = Image.open("personas-produktmarketing.jpg") # No require normalización de color
-img_tensor = transform(img)
+# transform = transforms.ToTensor()
+# img = Image.open("person_recognition/persona1.png")
+# img_tensor = transform(img)
 
-result = model(img_tensor.unsqueeze(0))[0]
+# result = model(img_tensor.unsqueeze(0))[0]
 
 
-bbox, lbls = ReadImage.filter_results(result)
-img = Image.open("person_recognition/persona1.png")
-# img = Image.open("personas-produktmarketing.jpg")
-ReadImage.draw_rectangles(img, bbox, lbls)
-display(img)
+# bbox, lbls = ReadImage.filter_results(result)
+# img = Image.open("person_recognition/persona1.png")
+# ReadImage.draw_rectangles(img, bbox, lbls)
+# display(img)
 
 
 # Luego puedes llamar a la función
-img = Image.open("person_recognition/persona1.png")
+# img = Image.open("person_recognition/persona1.png")
 # img = Image.open("personas-produktmarketing.jpg")
 
-ReadImage.draw_rectangles_red(img, bbox, lbls)
+# ReadImage.draw_rectangles_red(img, bbox, lbls)
 
 # Muestra la imagen con los rectángulos dibujados
-display(img)
+# display(img)

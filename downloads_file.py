@@ -2,6 +2,8 @@ from telegram import Bot, Update
 from telegram.ext import MessageHandler, Filters, Updater
 from telegram.ext import Filters
 import subprocess
+from person_recognition.recognition import Recognition
+from person_recognition.read_image import ReadImage
 
 
 import os
@@ -25,6 +27,7 @@ def handle_document(update: Update, context):
     file.download(custom_path=os.path.join(
         DOWNLOAD_FOLDER, update.message.document.file_name))
     update.message.reply_text("Archivo descargado con éxito!")
+    evaluate_image()
 
 
 def main():
@@ -37,6 +40,14 @@ def main():
     # Iniciando el bot
     updater.start_polling()
     updater.idle()
+
+
+def evaluate_image():
+    recognition = Recognition()
+    model, result, img = recognition.recognition_init()
+    # recognition.set_rectangle_to_image(result)
+    bbox, lbls = ReadImage.filter_results(result)
+    ReadImage.draw_rectangles_red(img, bbox, lbls)
 
 
 main()

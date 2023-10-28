@@ -6,6 +6,7 @@ from torchvision import transforms
 from PIL import Image
 from PIL import ImageFont, ImageDraw
 from IPython.display import display
+import person_recognition.file_admin as FileAdmin
 
 
 class Recognition:
@@ -16,17 +17,16 @@ class Recognition:
         # Constructor sin argumentos, pero puede inicializar atributos aquí
         self.data = None
 
-    def test_init(self):
+    def recognition_init(self):
         model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
         model.eval()
 
         transform = transforms.ToTensor()
-        img = Image.open("person_recognition/persona1.png")
-        # img = Image.open("personas-produktmarketing.jpg") # No require normalización de color
+        img = Image.open(FileAdmin.get_name_image())  # leer imagen descargada
         img_tensor = transform(img)
 
         result = model(img_tensor.unsqueeze(0))[0]
-        self.set_rectangle_to_image()
+        return model, result, img
 
     def draw_rectangles(self, img, bbox, lbls):
         draw = ImageDraw.Draw(img)
@@ -36,16 +36,15 @@ class Recognition:
                 draw.text([int(d) for d in bbox[k][:2]],
                           self.label2name[lbls[k]], fill='white')
 
-    def filter_results(result, threshold=0.9):
+    def filter_results(self, result, threshold=0.9):
         mask = result['scores'] > threshold
         bbox = result['boxes'][mask].detach().cpu().numpy()
         lbls = result['labels'][mask].detach().cpu().numpy()
         return bbox, lbls
 
-    def set_rectangle_to_image(self):
-        bbox, lbls = self.filter_results(self.result)
-        img = Image.open("person_recognition/persona1.png")
-        # img = Image.open("personas-produktmarketing.jpg")
+    def set_rectangle_to_image(self, result):
+        bbox, lbls = self.filter_results(result)
+        img = Image.open(FileAdmin.get_name_image())
         self.draw_rectangles(img, bbox, lbls)
         display(img)
 
