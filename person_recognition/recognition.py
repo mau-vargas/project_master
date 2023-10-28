@@ -7,6 +7,13 @@ from PIL import Image
 from PIL import ImageFont, ImageDraw
 from IPython.display import display
 import person_recognition.file_admin as FileAdmin
+from tensorflow import keras
+from tensorflow.keras.preprocessing import image
+import matplotlib.pyplot as plt
+
+# Mostrar las predicciones
+class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
+               'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 
 
 class Recognition:
@@ -48,12 +55,31 @@ class Recognition:
         self.draw_rectangles(img, bbox, lbls)
         display(img)
 
+######################################################################
+    def model_cnn():
+        model = keras.models.load_model('modelo_cnn.h5')
+        return model
 
-# Crear un objeto de la clase Persona
-# recognition = Recognition()
+    # Función para mostrar la imagen
+    def display_image(img_array):
+        plt.imshow(img_array.squeeze(), cmap='gray')
+        plt.axis('off')
+        plt.show()
 
-# Mostrar la información de persona1
-# recognition.test_init()
+    def load_image(self):
+        # Cargar y preprocesar la imagen
+        img_path = 'persona_top.png'
+        img = image.load_img(img_path, target_size=(
+            28, 28), color_mode='grayscale')  #
+        img_array = image.img_to_array(img)
+        img_preprocessed = np.expand_dims(img_array, axis=0)
+        # Mostrar la imagen
+        # display_image(img_array)
+        # Realizar predicciones con el modelo
+        predictions = self.model_cnn().predict(img_preprocessed)
+        predicted_class = class_names[np.argmax(predictions)]
+        print(f"Predicted class: {predicted_class}")
+        print(f"Prediction probabilities: {predictions[0]}")
 
 
-# fnt = ImageFont.truetype("arial.ttf", 20)
+######################################################################
