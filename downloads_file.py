@@ -1,0 +1,42 @@
+from telegram import Bot, Update
+from telegram.ext import MessageHandler, Filters, Updater
+from telegram.ext import Filters
+import subprocess
+
+
+import os
+
+TOKEN = '6957289365:AAES1UgAefuj2GTgFhIyDJvCiLaV1fxLhfc'
+DOWNLOAD_FOLDER = "downloads/"
+
+command = ["sudo", "chmod", "+r", "downloads/"]
+
+
+if not os.path.exists(DOWNLOAD_FOLDER):
+    os.makedirs(DOWNLOAD_FOLDER)
+    subprocess.run(command)
+
+
+def handle_document(update: Update, context):
+    # Obteniendo el archivo/documento enviado al bot
+    file = update.message.document.get_file()
+
+    # Descargando el archivo
+    file.download(custom_path=os.path.join(
+        DOWNLOAD_FOLDER, update.message.document.file_name))
+    update.message.reply_text("Archivo descargado con éxito!")
+
+
+def main():
+    updater = Updater(token=TOKEN, use_context=True)
+    dp = updater.dispatcher
+
+    # Manejador para archivos/documentos
+    dp.add_handler(MessageHandler(Filters.document, handle_document))
+
+    # Iniciando el bot
+    updater.start_polling()
+    updater.idle()
+
+
+main()
