@@ -1,4 +1,4 @@
 downloads/
 .DS_Store
 *__pycache__/
-
+person_recognition/image/

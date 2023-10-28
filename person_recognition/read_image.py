@@ -2,6 +2,7 @@ from PIL import Image, ImageFont, ImageDraw
 from IPython.display import display
 from torchvision import models
 from torchvision import transforms
+import person_recognition.file_admin as FileAdmin
 
 label2name = {1: 'persona', 2: 'bicicleta', 3: 'auto', 4: 'moto',
               8: 'camioneta', 18: 'perro'}
@@ -24,6 +25,7 @@ class ReadImage:
                           label2name[lbls[k]], fill='white')
 
     def draw_rectangles_red(img, bbox, lbls):
+        FileAdmin.newFolder("person_recognition/image/")
         draw = ImageDraw.Draw(img)
         for k in range(len(bbox)):
             if lbls[k] in label2name.keys() and label2name[lbls[k]] == 'persona':
