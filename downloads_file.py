@@ -13,11 +13,13 @@ TOKEN = '6957289365:AAES1UgAefuj2GTgFhIyDJvCiLaV1fxLhfc'
 DOWNLOAD_FOLDER = "downloads/"
 
 
-FileAdmin.deletFolder(DOWNLOAD_FOLDER)
-FileAdmin.newFolder(DOWNLOAD_FOLDER)
+def adminFile():
+    FileAdmin.deletFolder(DOWNLOAD_FOLDER)
+    FileAdmin.newFolder(DOWNLOAD_FOLDER)
 
 
 def handle_document(update: Update, context):
+    adminFile()
     # Obteniendo el archivo/documento enviado al bot
     file = update.message.document.get_file()
     # Descargando el archivo
