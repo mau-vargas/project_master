@@ -58,21 +58,18 @@ class Recognition:
 
 ######################################################################
 
-    # Función para mostrar la imagen
-    def display_image(img_array):
-        plt.imshow(img_array.squeeze(), cmap='gray')
-        plt.axis('off')
-        plt.show()
-
-    def load_image(self, img_path):
-        # Cargar y preprocesar la imagen
+    def set_image_array(self, img_path):
         img = image.load_img(img_path, target_size=(
-            28, 28), color_mode='grayscale')  #
+            28, 28), color_mode='grayscale')
         img_array = image.img_to_array(img)
         img_preprocessed = np.expand_dims(img_array, axis=0)
-        # Mostrar la imagen
-        # display_image(img_array)
-        # Realizar predicciones con el modelo
+
+        return img, img_array, img_preprocessed
+
+    def load_image_cnn(self, img_path):
+        # Cargar y preprocesar la imagen
+        _, _, img_preprocessed = self.set_image_array(img_path)
+
         model = keras.models.load_model('models/modelo_cnn.h5')
         predictions = model.predict(img_preprocessed)
         predicted_class = class_names[np.argmax(predictions)]
@@ -81,6 +78,22 @@ class Recognition:
         print(f"Prediction probabilities: {predictions[0]}")
 
         return predicted_class, predictions[0]
+
+    def load_image_svm(self, _):
+        # Cargar y preprocesar la imagen
+        _, img_array, _ = self.set_image_array()
+        # Esto convierte la imagen en un vector 1D.
+        img_flat = img_array.reshape(1, -1)
+        # predictions = svm_model.predict(img_flat)
+        svm_model = joblib.load('models/svm_model.pkl')
+
+        predictions = svm_model.predict(img_flat)
+        predicted_class = class_names[np.argmax(predictions)]
+
+        print(f"Predicted class: {predicted_class}")
+        print(f"Prediction probabilities: {predictions}")
+
+        return predicted_class, predictions
 
 
 ######################################################################

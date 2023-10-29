@@ -33,7 +33,7 @@ def handle_document(update: Update, context):
     # Descargando el archivo
     file.download(custom_path=os.path.join(
         DOWNLOAD_FOLDER, update.message.document.file_name))
-    # update.message.reply_text("Archivo descargado con éxito!")
+    update.message.reply_text("Procesando la imagen...")
     evaluate_image(update)
 
 
@@ -60,7 +60,8 @@ def evaluate_image(update):
 
 def recognize_clothing(update):
     for element in FileAdmin.list_files(IMAGE_FOLDER):
-        predicted_class, predictions = recognition.load_image(
+        predicted_class = "NONE"
+        predicted_class, predictions = recognition.load_image_cnn(
             IMAGE_FOLDER+element)
         time.sleep(1)
         threading.Thread(target=send_message, args=(
