@@ -60,7 +60,6 @@ def evaluate_image(update):
 
 def recognize_clothing(update):
     for element in FileAdmin.list_files(IMAGE_FOLDER):
-        predicted_class = "NONE"
         predicted_class, predictions = recognition.load_image_cnn(
             IMAGE_FOLDER+element)
         time.sleep(1)
