@@ -1,9 +1,6 @@
 import os
-import shutil
-
 
 directory_path = 'downloads'
-DOWNLOAD_FOLDER = "downloads/"
 
 
 def list_files(directory):
