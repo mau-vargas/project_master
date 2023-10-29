@@ -3,4 +3,4 @@ downloads/
 *__pycache__/
 person_recognition/image/
 .vscode/
-models/
+#models/
