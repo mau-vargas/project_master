@@ -9,6 +9,7 @@ from IPython.display import display
 import person_recognition.file_admin as FileAdmin
 from tensorflow import keras
 from tensorflow.keras.preprocessing import image
+
 import matplotlib.pyplot as plt
 
 # Mostrar las predicciones
@@ -56,9 +57,6 @@ class Recognition:
         display(img)
 
 ######################################################################
-    def model_cnn():
-        model = keras.models.load_model('modelo_cnn.h5')
-        return model
 
     # Función para mostrar la imagen
     def display_image(img_array):
@@ -66,9 +64,8 @@ class Recognition:
         plt.axis('off')
         plt.show()
 
-    def load_image(self):
+    def load_image(self, img_path):
         # Cargar y preprocesar la imagen
-        img_path = 'persona_top.png'
         img = image.load_img(img_path, target_size=(
             28, 28), color_mode='grayscale')  #
         img_array = image.img_to_array(img)
@@ -76,10 +73,14 @@ class Recognition:
         # Mostrar la imagen
         # display_image(img_array)
         # Realizar predicciones con el modelo
-        predictions = self.model_cnn().predict(img_preprocessed)
+        model = keras.models.load_model('models/modelo_cnn.h5')
+        predictions = model.predict(img_preprocessed)
         predicted_class = class_names[np.argmax(predictions)]
+
         print(f"Predicted class: {predicted_class}")
         print(f"Prediction probabilities: {predictions[0]}")
+
+        return predicted_class, predictions[0]
 
 
 ######################################################################
