@@ -74,9 +74,6 @@ class Recognition:
         predictions = model.predict(img_preprocessed)
         predicted_class = class_names[np.argmax(predictions)]
 
-        print(f"Predicted class: {predicted_class}")
-        print(f"Prediction probabilities: {predictions[0]}")
-
         return predicted_class, predictions[0]
 
     def load_image_svm(self, _):
@@ -94,6 +91,9 @@ class Recognition:
         print(f"Prediction probabilities: {predictions}")
 
         return predicted_class, predictions
+
+    def load_image_random_forest():
+        print("test")
 
 
 ######################################################################

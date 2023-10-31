@@ -65,6 +65,8 @@ def recognize_clothing(update):
         time.sleep(1)
         threading.Thread(target=send_message, args=(
             update, element+": "+predicted_class, IMAGE_FOLDER+element)).start()
+        print(f"Predicted class: {predicted_class}")
+        print(f"Prediction probabilities: {predictions[0]}")
 
 
 def send_message(update, predicted_class, path):
